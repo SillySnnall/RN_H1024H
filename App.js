@@ -1,25 +1,26 @@
 import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
-import {Button,SearchBar} from 'antd-mobile';
+import Home from "./app/page/Home";
+import SimpleNavigationApp from "./test/SimpleNavigationApp";
+import {StackNavigator} from "react-navigation";
+import MyScene from "./test/MyScene";
+import ThreeScence from "./test/ThreeScence";
+
+const Page = StackNavigator({
+    My: {screen: MyScene},
+    Simple: {
+        screen: SimpleNavigationApp,
+        navigationOptions: {
+            header: null //隐藏顶部导航栏
+        }
+    },
+    Three: {screen: ThreeScence},
+
+});
+
 export default class App extends React.Component {
     render() {
         return (
-            <View style={styles.container}>
-                <Text>Open up App.js to start working on your app!</Text>
-                <Text>Changes you make will automatically reload.</Text>
-                <Text>Shake your phone to open the developer menu.</Text>
-                <Button>antd-mobile button</Button>
-                <SearchBar placeholder="Search" maxLength={8} />
-            </View>
+            <Page/>
         );
     }
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-});
