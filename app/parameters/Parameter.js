@@ -9,7 +9,7 @@ class Parameter{
 
     static getCoverImgDetailed(irType,pageNum,itemCount){
         let map = new Map();
-        map.set('ac', 'getCoverImg')
+        map.set('ac', 'getCoverImgDetailed')
             .set('irType', irType)
             .set('pageNum', pageNum)
             .set('itemCount', itemCount);
