@@ -7,14 +7,26 @@ let styles = StyleSheet.create({
         paddingTop: 22,
     },
     item: {
-        flex: 1, margin: 5, backgroundColor: '#ddd', height: 130
+        flex: 1,
+        margin: 5,
+        backgroundColor: '#ddd',
+        height: 240,
+        borderRadius: 10,
     },
     img: {
         width: '100%',
-        flex: 1
+        flex: 1,
+        borderRadius: 10,
     },
-    footer:{
-        textAlign:'center'
+    footer_view:{
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        height: 20,
+    },
+    footer_bubbles:{
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: "center"
     }
 });
 module.exports = styles;

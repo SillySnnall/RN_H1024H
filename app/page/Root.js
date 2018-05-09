@@ -36,7 +36,7 @@ export default class Root extends Component {
                 <TabNavigator tabBarStyle={styles.tabNavigator} >
                     <TabNavigator.Item
                         selected={this.state.selectedTab == TAB_Recommend[0]}
-                        title={TAB_Recommend[0]}
+                        // title={TAB_Recommend[0]}
                         titleStyle={styles.tabText}
                         selectedTitleStyle={styles.selectedTabText}
                         renderIcon={() => <Image style={styles.icon} source={TAB_Recommend[1]}/>}
@@ -46,7 +46,7 @@ export default class Root extends Component {
                     </TabNavigator.Item>
                     <TabNavigator.Item
                         selected={this.state.selectedTab == TAB_Home[0]}
-                        title={TAB_Home[0]}
+                        // title={TAB_Home[0]}
                         titleStyle={styles.tabText}
                         selectedTitleStyle={styles.selectedTabText}
                         renderIcon={() => <Image style={styles.icon} source={TAB_Home[1]}/>}
@@ -56,7 +56,7 @@ export default class Root extends Component {
                     </TabNavigator.Item>
                     <TabNavigator.Item
                         selected={this.state.selectedTab == TAB_Me[0]}
-                        title={TAB_Me[0]}
+                        // title={TAB_Me[0]}
                         titleStyle={styles.tabText}
                         selectedTitleStyle={styles.selectedTabText}
                         renderIcon={() => <Image style={styles.icon} source={TAB_Me[1]}/>}

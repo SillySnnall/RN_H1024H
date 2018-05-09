@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {View, FlatList, Text, Image, TouchableOpacity} from 'react-native';
+import {Bubbles, DoubleBounce, Bars, Pulse} from 'react-native-loader';
 import styles from '../style/HomeStyle';
 import HttpManager from "../http/HttpManager";
 import HttpConfig from "../http/HttpConfig";
@@ -40,14 +41,18 @@ export default class Home extends Component {
         this.state = {
             data: [],
             isRefreshing: false,
-            footerText: '加载中。。。'
+            footerShow: false
         };
     }
 
     componentDidMount() {
+        this._isMounted = true
         this._getCoverImg(0)
     }
 
+    componentWillUnmount() {
+        this._isMounted = false
+    }
 
     _getCoverImg(isLoad) {
         this.setState({isRefreshing: false});//停止刷新
@@ -56,7 +61,7 @@ export default class Home extends Component {
             page = 0;
             index = 0;
         } else {
-            this.setState({footerText: '加载中。。。'});
+            this.setState({footerShow: true});
             page += ITEM_COUNT;
         }
         HttpManager.post(Parameter.getCoverImg(page, ITEM_COUNT)).then(success => {
@@ -69,14 +74,16 @@ export default class Home extends Component {
                 });
                 index++
             });
-            if (dataBlog.length == 0) {
-                this.setState({footerText: '没有更多数据'});
-            }
-            if (isLoad == 0) {
-                this.setState({data: dataBlog});
-                this.setState({isRefreshing: false});//停止刷新
-            } else {
-                this.setState((state) => ({data: state.data.concat(dataBlog)}));
+            if (this._isMounted) {
+                if (dataBlog.length == 0) {
+                    this.setState({footerShow: false});
+                }
+                if (isLoad == 0) {
+                    this.setState({data: dataBlog});
+                    this.setState({isRefreshing: false});//停止刷新
+                } else {
+                    this.setState((state) => ({data: state.data.concat(dataBlog)}));
+                }
             }
         }).catch(error => {
             Toast.show(error)
@@ -84,7 +91,11 @@ export default class Home extends Component {
     }
 
     _footer = () => {
-        return <Text style={styles.footer}>{this.state.footerText}</Text>;
+        return <View style={styles.footer_view}>
+            {this.state.footerShow ?
+                <Bubbles style={styles.footer_bubbles} size={5} color="#FFF"/> :
+                null}
+        </View>
     };
 
     _renderItem({item, index}) {
@@ -101,7 +112,7 @@ export default class Home extends Component {
     }
 
     _clickItem(item, index) {
-        navigate('Details', {irType: item.value.irType,navigate:navigate})
+        navigate('Details', {irType: item.value.irType, navigate: navigate})
     }
 }
 

@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import {View, FlatList, Text, Image,TouchableOpacity} from 'react-native';
+import {View, FlatList, Text, Image, TouchableOpacity} from 'react-native';
+import {Bubbles, DoubleBounce, Bars, Pulse} from 'react-native-loader';
 import styles from '../style/DetailsStyle';
 import HttpManager from "../http/HttpManager";
 import HttpConfig from "../http/HttpConfig";
@@ -12,19 +13,15 @@ let page = 0;
 let index = 0;
 let irType;
 let navigate;
+let navigation;
 export default class Details extends Component {
 
     render() {
-        navigate =this.props.navigation.state.params.navigate;
+        navigate = this.props.navigation.state.params.navigate;
+        navigation = this.props.navigation;
         irType = this.props.navigation.state.params.irType;
         return (
             <View style={styles.container}>
-                <View style={styles.title}>
-                    <Image source={LocalImg.pre} style={styles.title_img}/>
-                    <View style={styles.title_view_text}>
-                        <Text style={styles.title_text}>浏览</Text>
-                    </View>
-                </View>
                 <FlatList
                     numColumns={2}
                     data={this.state.data}
@@ -39,6 +36,16 @@ export default class Details extends Component {
                     )}
                     ListFooterComponent={this._footer}
                 />
+                <View style={styles.title}>
+                    <TouchableOpacity style={styles.title_view} activeOpacity={1} onPress={this._clickBack.bind(this)}>
+                        <Image source={LocalImg.pre} style={styles.title_img}/>
+                        {/*<Text style={styles.title_text}>返回</Text>*/}
+                    </TouchableOpacity>
+                    {/*<View style={styles.title_view}>*/}
+                    {/*<Image source={LocalImg.top} style={styles.title_img}/>*/}
+                    {/*/!*<Text style={styles.title_text}>顶部</Text>*!/*/}
+                    {/*</View>*/}
+                </View>
             </View>
         );
     }
@@ -48,14 +55,18 @@ export default class Details extends Component {
         this.state = {
             data: [],
             isRefreshing: false,
-            footerText: '加载中。。。'
+            footerShow: false
         };
     }
 
     componentDidMount() {
+        this._isMounted = true
         this._getCoverImgDetailed(0)
     }
 
+    componentWillUnmount() {
+        this._isMounted = false
+    }
 
     _getCoverImgDetailed(isLoad) {
         this.setState({isRefreshing: false});//停止刷新
@@ -64,7 +75,7 @@ export default class Details extends Component {
             page = 0;
             index = 0;
         } else {
-            this.setState({footerText: '加载中。。。'});
+            this.setState({footerShow: true});
             page += ITEM_COUNT;
         }
         HttpManager.post(Parameter.getCoverImgDetailed(irType, page, ITEM_COUNT)).then(success => {
@@ -77,14 +88,16 @@ export default class Details extends Component {
                 });
                 index++
             });
-            if (dataBlog.length == 0) {
-                this.setState({footerText: '没有更多数据'});
-            }
-            if (isLoad == 0) {
-                this.setState({data: dataBlog});
-                this.setState({isRefreshing: false});//停止刷新
-            } else {
-                this.setState((state) => ({data: state.data.concat(dataBlog)}));
+            if (this._isMounted) {
+                if (dataBlog.length == 0) {
+                    this.setState({footerShow: false});
+                }
+                if (isLoad == 0) {
+                    this.setState({data: dataBlog});
+                    this.setState({isRefreshing: false});//停止刷新
+                } else {
+                    this.setState((state) => ({data: state.data.concat(dataBlog)}));
+                }
             }
         }).catch(error => {
             Toast.show(error)
@@ -93,7 +106,11 @@ export default class Details extends Component {
 
 
     _footer = () => {
-        return <Text style={styles.footer}>{this.state.footerText}</Text>;
+        return <View style={styles.footer_view}>
+            {this.state.footerShow ?
+                <Bubbles style={styles.footer_bubbles} size={5} color="#FFF"/> :
+                null}
+        </View>
     };
 
     _renderItem = (item) => {
@@ -110,6 +127,10 @@ export default class Details extends Component {
 
     _clickItem(item, index) {
         navigate('ImgBrowsing', {name: 'xxxx'})
+    }
+
+    _clickBack() {
+        navigation.pop()
     }
 }
 

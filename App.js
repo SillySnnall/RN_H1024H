@@ -4,6 +4,7 @@ import Root from "./app/page/Root";
 import Details from "./app/page/Details";
 import {Platform, BackHandler, Alert} from 'react-native';
 import ImgBrowsing from "./app/page/ImgBrowsing";
+import Test from "./test/Test";
 
 let currentPage = "Root";
 
@@ -38,7 +39,7 @@ const Page = StackNavigator({
 export default class App extends React.Component {
     render() {
         return (
-            <Page/>
+            <Test/>
         );
     }
 

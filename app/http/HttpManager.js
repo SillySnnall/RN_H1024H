@@ -23,10 +23,9 @@ class HttpManager {
                 } else {
                     errorCall(response.error);
                 }
-            })
-                .then((responseData) => {
-                    successCall(responseData);
-                }).catch((err) => {
+            }).then((responseData) => {
+                successCall(responseData);
+            }).catch((err) => {
                 errorCall(err);
             });
         });
